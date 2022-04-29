@@ -1,0 +1,62 @@
+use FinalProject_Group8;
+--Query 1
+--show revenue per customer
+SELECT C.CustomerID,
+	   OH.OrderID,
+	   SUM ( OL.Price * OL.Quantity ) AS Revenue 
+FROM CUSTOMER as C
+LEFT OUTER JOIN ORDER_HEADER AS OH ON C.CustomerID = OH.CustomerID
+LEFT OUTER JOIN ORDER_LINE AS OL ON OH.OrderID = OL.OrderID
+GROUP BY C.CustomerID, OH.OrderID;
+
+--Query 2
+--Show inventory of products
+SELECT * FROM PRODUCT
+ORDER BY ProductID;
+
+--Query 3
+--See wage expense of all employees
+INSERT INTO WAREHOUSE_EMP (EmployeeID, HourlyPay, ForkliftCert)
+VALUES (1, 25.00, 'Y')
+
+SELECT E.EmployeeID,
+	   CONCAT ( E.FirstName, ' ', E.LastName ) AS EmployeeName,
+	   SUM ( WE.HourlyPay  * 40) AS WarehousePay,
+	   SUM ( (T.HourlyPay * 40) + (T.MilesDriven * T.PayPerMile) ) AS TruckerPay,
+	   A.Salary AS AdministrationPay,
+	   SUM ( SR.BaseSalary + SR.Commissions) AS SalesRepPay
+FROM EMPLOYEES AS E
+LEFT OUTER JOIN WAREHOUSE_EMP AS WE ON E.EmployeeID = WE.EmployeeID
+LEFT OUTER JOIN TRUCKER AS T ON E.EmployeeID = T.EmployeeID
+LEFT OUTER JOIN SERVICE_MEMBER AS SM ON E.EmployeeID = SM.EmployeeID
+LEFT OUTER JOIN ADMINISTRATION AS A ON E.EmployeeID = A.EmployeeID
+LEFT OUTER JOIN SALES_REP AS SR ON E.EmployeeID = SR.EmployeeID
+GROUP BY E.EmployeeID, E.FirstName, E.LastName, A.Salary;
+
+
+--Query 4
+--Show Salesman sales
+--Aggregate the number of orders the salesman are on
+
+--Query 5
+
+
+
+
+INSERT INTO CUSTOMER (FirstName, LastName, BillingStreetAddress, BillingZipCode, BillingStateCode, InsuranceCompany, InsuranceID)
+VALUES	('Bruh', 'Bruh', 'bruh.bruh@bruh.bruh', 84106, 'UT', NULL, NULL),
+	    ('joe', 'mama', 'joe.mama@joe.mama', 84112, 'UT', NULL, NULL)
+
+INSERT INTO EMPLOYEES (SSN, FirstName, MiddleName, LastName, StreetAddress, City, StateCode, ZipCode, Title, StartDate, EndDate)
+VALUES	(444444, 'man', NULL, 'cmon', '2222 Employee St', 'SLC', 'UT', 84113, 'Manager', GETDATE(), GETDATE())
+
+INSERT INTO ORDER_HEADER (CustomerID, EmployeeID, OrderDate, OrderTime, DeliveryAddress, DeliveryZipCode, DeliveryState)
+VALUES (1, 1, GETDATE(), GETDATE(), '1111 Rev St', 1111, 'UT'),
+	   (2, 1, GETDATE(), GETDATE(), '1111 Revenue St', 1112, 'UT')
+
+INSERT INTO PRODUCT (ProductName, ProductDescription, SalesPrice, ProductionTime)
+VALUES ('Test', 'Test Product', 34.99, 10)
+
+INSERT INTO ORDER_LINE (OrderID, ProductID, Price, Quantity)
+VALUES (1, 1, 34.99, 50),
+	   (2, 1, 34.99, 100)
